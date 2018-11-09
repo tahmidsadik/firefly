@@ -27,7 +27,6 @@ module.exports = {
       {
         test: /\.styl?$/,
         use: [
-          // MiniCssExtractPlugin.loader,
           "style-loader",
           "css-loader",
           "postcss-loader",
@@ -37,9 +36,6 @@ module.exports = {
     ]
   },
   plugins: [
-    // new MiniCssExtractPlugin({
-    //   filename: "css/[name].css"
-    // })
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: "My App",
