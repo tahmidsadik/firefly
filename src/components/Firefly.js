@@ -1,5 +1,5 @@
 let CWidth = window.innerWidth
-let CHeight = 400
+let CHeight = window.innerHeight - 100
 const Colors = {
   fireflyYellow: '#EDCBAF',
   black: 'black'
@@ -129,7 +129,9 @@ const context = canvas.getContext('2d')
 
 const resizeCanvas = () => {
   canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
   CWidth = window.innerWidth
+  CHeight = window.innerHeight
 }
 
 const degToRad = deg => (Math.PI / 180) * deg
@@ -139,19 +141,56 @@ export const initialize = () => {
   window.addEventListener('resize', resizeCanvas, false)
 }
 
+export const circularPath = (radius, start = 0) => {
+  let time = start
+  let step = 0.001
+  return () => {
+    time += step
+    return {
+      x: radius * Math.cos(time),
+      y: radius * Math.sin(time)
+    }
+  }
+}
+
+export const drawstar = (ctx, x, y) => {
+  ctx.strokeStyle = Colors.fireflyYellow
+  ctx.moveTo(x, y)
+  ctx.arc(x, y, 0.1, degToRad(0), degToRad(360), false)
+}
+
+const stars = [...Array(80).keys()].map(n =>
+  circularPath(n * 3 + 15, getRandomInt(0, 360))
+)
+
 export const drawLoop = () => {
   window.requestAnimationFrame(drawLoop)
-  context.clearRect(0, 0, CWidth, CHeight)
-  context.fillStyle = 'black'
-  context.fillRect(0, 0, CWidth, CHeight)
+  // context.clearRect(0, 0, CWidth, CHeight)
+  // context.fillStyle = 'black'
+  // context.fillRect(0, 0, CWidth, CHeight)
 
   const rotate = getRandomInt(1, 30)
 
-  context.filter = `blur(1.5px) hue-rotate(${rotate}deg)`
-
   context.beginPath()
-  drawFireflies(context)
-
+  // drawFireflies(context)
+  stars.forEach(star => {
+    const { x, y } = star()
+    drawstar(context, CWidth / 2 + x, CHeight / 2 + y)
+  })
   // c.stroke()
-  context.fill()
+  context.lineWidth = 0.5 + Math.random() * 1.5
+  // context.fill()
+
+  // context.filter = `blur(1.5px)`
+  // context.filter = `blur(0) brightness(${getRandomInt(
+  //   50,
+  //   130
+  // )}%) contrast(90%) grayscale(20%)`
+  context.stroke()
+
+  context.font = '30px Fira Code'
+  context.fonrFamily = 'Fira Code'
+  context.fillStyle = '#f9331f'
+  // context.filter = `brightness(${getRandomInt(80, 800)}%)`
+  context.fillText('A thing of beauty is a joy forever', 180, CHeight / 3)
 }

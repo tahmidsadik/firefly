@@ -8,7 +8,7 @@ import { drawLoop, initialize } from './components/Firefly'
 initialize()
 drawLoop()
 
-ReactDOM.render(<Container />, document.getElementById('root'))
+// ReactDOM.render(<Container />, document.getElementById('root'))
 // hmr replacement
 if (module.hot) {
   module.hot.accept()
